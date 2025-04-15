@@ -4,15 +4,21 @@ using UnityEngine;
 
 public class EnemyWeakpoint : MonoBehaviour
 {
-    // Start is called before the first frame update
+    private PlayerMovement player;
+    private Transform enemy;
     void Start()
     {
-        
+        player = GameObject.Find("Player").GetComponent<PlayerMovement>();
+        enemy = GetComponentInParent<Transform>();
     }
 
-    // Update is called once per frame
-    void Update()
+    private void OnTriggerEnter2D(Collider2D collision)
     {
-        
+        if (collision.CompareTag("Player"))
+        {
+            Destroy(enemy.gameObject);
+
+            player.Jump(5);
+        }
     }
 }

@@ -78,6 +78,14 @@ public class PlayerMovement : MonoBehaviour
         audioSource.PlayOneShot(jumpSound, 0.5f);
     }
 
+    public void Jump(float forceX, float force)
+    {
+        rb.AddForce(new Vector2(forceX, rb.velocity.y));
+        rb.velocity = new Vector2(rb.velocity.x, force);
+
+        audioSource.PlayOneShot(jumpSound, 0.5f);
+    }
+
     public void UpdateUI()
     {
         foreach (Transform child in playerUI.transform)
