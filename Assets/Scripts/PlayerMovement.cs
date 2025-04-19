@@ -14,7 +14,7 @@ public class PlayerMovement : MonoBehaviour
     private Vector3 velocity;
 
     private int health = 3;
-    private float speed = 5f;
+    private float speed = 4f;
     private float jumpForce = 7f;
     
     private Rigidbody2D rb;
@@ -22,6 +22,8 @@ public class PlayerMovement : MonoBehaviour
     private AudioSource audioSource;
     
     private bool isGrounded;
+
+    internal bool dashReady = true;
     void Start()
     {
         playerUI = GameObject.Find("PlayerUI").GetComponent<Transform>();
@@ -36,8 +38,9 @@ public class PlayerMovement : MonoBehaviour
 
     void Update()
     {
+        Debug.Log(dashReady);
+
         float move = Input.GetAxisRaw("Horizontal");
-        rb.velocity = new Vector2(move * speed, rb.velocity.y);
 
         background.position = Vector3.SmoothDamp(
             new Vector3(background.position.x, background.position.y, background.position.z),
@@ -46,13 +49,27 @@ public class PlayerMovement : MonoBehaviour
             0.5f
             );
 
-        if (move > 0) transform.localScale = new Vector3(Mathf.Abs(transform.localScale.x), transform.localScale.y, transform.localScale.z);
-        if (move < 0) transform.localScale = new Vector3(-Mathf.Abs(transform.localScale.x), transform.localScale.y, transform.localScale.z);
+        if (move > 0) 
+        { 
+            transform.localScale = new Vector3(Mathf.Abs(transform.localScale.x), transform.localScale.y, transform.localScale.z);
+            rb.velocity = new Vector2(move * speed, rb.velocity.y);
+        }
+
+        if (move < 0) 
+        { 
+            transform.localScale = new Vector3(-Mathf.Abs(transform.localScale.x), transform.localScale.y, transform.localScale.z); 
+            rb.velocity = new Vector2(move * speed, rb.velocity.y);
+        }
 
         animator.SetBool("isRunning", move != 0);
         
         isGrounded = Physics2D.OverlapCircle(transform.position, 0.5f, groundLayer);
         animator.SetBool("isJumping", !isGrounded);
+
+        if (Input.GetKeyDown(KeyCode.LeftShift) && dashReady)
+        {
+            Dash();
+        }
 
         if ((Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.Space)) && isGrounded)
         {
@@ -72,6 +89,24 @@ public class PlayerMovement : MonoBehaviour
         UpdateUI();
     }
 
+    public void Dash()
+    {
+        if (transform.localScale.x > 0)
+        {
+            rb.velocity = new Vector2(10f, rb.velocity.y);
+        }
+        else rb.velocity = new Vector2(-10f, rb.velocity.y);
+
+        StartCoroutine(DashCooldown());
+    }
+
+    public IEnumerator DashCooldown()
+    {
+        dashReady = false;
+        yield return new WaitForSeconds(3);
+        dashReady = true;
+    }
+
     public void Jump(float force)
     {
         rb.velocity = new Vector2(rb.velocity.x, force);
@@ -80,8 +115,11 @@ public class PlayerMovement : MonoBehaviour
 
     public void Jump(float forceX, float force)
     {
-        rb.AddForce(new Vector2(forceX, rb.velocity.y));
-        rb.velocity = new Vector2(rb.velocity.x, force);
+        if (transform.localScale.x > 0)
+        {
+            rb.velocity = new Vector2(forceX, force);
+        }
+        else rb.velocity = new Vector2(-forceX, force);
 
         audioSource.PlayOneShot(jumpSound, 0.5f);
     }

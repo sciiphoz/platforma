@@ -31,7 +31,6 @@ public class JumpPad : MonoBehaviour
         yield return new WaitForSeconds(0.5f);
 
         jumppadSprite.transform.position = new Vector2(jumppadSprite.transform.position.x, jumppadSprite.transform.position.y + 0.09f);
-        jumppadSprite.sprite = unpressedState;
-
+        jumppadSprite.sprite = unpressedState; 
     }
 }
