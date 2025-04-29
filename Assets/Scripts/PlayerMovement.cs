@@ -1,12 +1,16 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerMovement : MonoBehaviour
 {
     [SerializeField] private LayerMask groundLayer;
     [SerializeField] private AudioClip jumpSound;
     [SerializeField] private Transform heart;
+
+    private Text starCounter;
+    private Text coinCounter;
 
     private Transform playerUI;
 
@@ -20,17 +24,33 @@ public class PlayerMovement : MonoBehaviour
     private Rigidbody2D rb;
     private Animator animator;
     private AudioSource audioSource;
+
+    private Animator settingsAnimator;
+    private bool settingsOpened = false;
     
     private bool isGrounded;
+    private bool isDamaged = false;
+    private int starCount = 0;
+    private int coinCount = 0;
 
-    internal bool dashReady = true;
+    private bool dashReady = true;
+    private void Awake()
+    {
+        PlayerPrefs.SetInt("Music", 1);
+        PlayerPrefs.SetInt("Sound", 1);
+    }
     void Start()
     {
         playerUI = GameObject.Find("PlayerUI").GetComponent<Transform>();
 
+        //starCounter = GameObject.Find("StarCounter").GetComponent<Text>();
+        //coinCounter = GameObject.Find("CoinCounter").GetComponent<Text>();
+
         rb = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
         audioSource = GetComponent<AudioSource>();
+
+        settingsAnimator = GameObject.Find("Settings").GetComponent<Animator>();
 
         background = GameObject.Find("BackgroundUI").GetComponent<Transform>();
         UpdateUI();
@@ -38,8 +58,6 @@ public class PlayerMovement : MonoBehaviour
 
     void Update()
     {
-        Debug.Log(dashReady);
-
         float move = Input.GetAxisRaw("Horizontal");
 
         background.position = Vector3.SmoothDamp(
@@ -80,17 +98,67 @@ public class PlayerMovement : MonoBehaviour
         {
             Time.timeScale = 0;
         }
+
+        if (Input.GetKeyDown(KeyCode.Escape)) 
+        {
+            settingsAnimator.Play("OpenSettings");
+            settingsOpened = true;
+            Time.timeScale = 0;
+        }
+
+        if (Input.GetKeyDown(KeyCode.Escape) && settingsOpened)
+        {
+            settingsAnimator.Play("CloseSettings");
+            settingsOpened = false;
+            Time.timeScale = 1;
+        }
     }
 
     public void TakeDamage(int damageValue)
     {
-        health -= damageValue;
+        if (isDamaged == false)
+        {
+            health -= damageValue;
 
-        UpdateUI();
+            StartCoroutine(IFramesCounter());
+            StartCoroutine(IFramesAnimation());
+            UpdateUI();
+        }
+    }
+
+    public IEnumerator IFramesCounter()
+    {
+        isDamaged = true;
+        yield return new WaitForSeconds(0.8f);
+        isDamaged = false;
+    }
+    public IEnumerator IFramesAnimation()
+    {
+        var material = transform.gameObject.GetComponent<Renderer>().material;
+        Color oldColor = material.color;
+
+        material.color = new Color(oldColor.r, oldColor.g, oldColor.b, 0);
+        yield return new WaitForSeconds(0.1f);
+        material.color = new Color(oldColor.r, oldColor.g, oldColor.b, 1);
+        yield return new WaitForSeconds(0.1f);
+        material.color = new Color(oldColor.r, oldColor.g, oldColor.b, 0);
+        yield return new WaitForSeconds(0.1f);
+        material.color = new Color(oldColor.r, oldColor.g, oldColor.b, 1);
+        yield return new WaitForSeconds(0.1f);
+        material.color = new Color(oldColor.r, oldColor.g, oldColor.b, 0);
+        yield return new WaitForSeconds(0.1f);
+        material.color = new Color(oldColor.r, oldColor.g, oldColor.b, 1);
+        yield return new WaitForSeconds(0.1f);
+        material.color = new Color(oldColor.r, oldColor.g, oldColor.b, 0);
+        yield return new WaitForSeconds(0.1f);
+        material.color = new Color(oldColor.r, oldColor.g, oldColor.b, 1);
+        yield return new WaitForSeconds(0.1f);
     }
 
     public void Dash()
     {
+        StartCoroutine(AnchorY());
+
         if (transform.localScale.x > 0)
         {
             rb.velocity = new Vector2(10f, rb.velocity.y);
@@ -99,7 +167,14 @@ public class PlayerMovement : MonoBehaviour
 
         StartCoroutine(DashCooldown());
     }
-
+    public IEnumerator AnchorY()
+    {
+        rb.constraints = RigidbodyConstraints2D.FreezePositionY;
+        rb.constraints = RigidbodyConstraints2D.FreezeRotation;
+        yield return new WaitForSeconds(0.2f);
+        rb.constraints = RigidbodyConstraints2D.None;
+        rb.constraints = RigidbodyConstraints2D.FreezeRotation;
+    } 
     public IEnumerator DashCooldown()
     {
         dashReady = false;
@@ -135,15 +210,20 @@ public class PlayerMovement : MonoBehaviour
         {
             Instantiate(heart, new Vector3(-8 + 1 * i, 4, 0), Quaternion.identity, playerUI);
         }
+
+        //coinCounter.text = coinCount.ToString();
+        //starCounter.text = starCount.ToString();
     }
 
     public void AddCoins()
     {
-
+        coinCount++;
+        UpdateUI();
     }
 
     public void AddStars()
     {
-
+        starCount++;
+        UpdateUI();
     }
 }

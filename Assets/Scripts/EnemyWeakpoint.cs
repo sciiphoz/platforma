@@ -9,7 +9,7 @@ public class EnemyWeakpoint : MonoBehaviour
     void Start()
     {
         player = GameObject.Find("Player").GetComponent<PlayerMovement>();
-        enemy = GetComponentInParent<Transform>();
+        enemy = transform.parent.GetComponent<Transform>();
     }
 
     private void OnTriggerEnter2D(Collider2D collision)

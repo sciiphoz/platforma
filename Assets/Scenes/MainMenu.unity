@@ -363,20 +363,19 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_FontData:
-    m_Font: {fileID: 12800000, guid: 5f49bce52d4560a43ad00c97bd95d644, type: 3}
-    m_FontSize: 60
+    m_Font: {fileID: 12800000, guid: 17dc2ff60bf8f534bb01e71929326c49, type: 3}
+    m_FontSize: 90
     m_FontStyle: 1
     m_BestFit: 0
     m_MinSize: 6
-    m_MaxSize: 60
+    m_MaxSize: 90
     m_Alignment: 4
     m_AlignByGeometry: 0
     m_RichText: 1
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "\u041D\u0430\u0436\u043C\u0438\u0442\u0435 \u043B\u044E\u0431\u0443\u044E
-    \u043A\u043D\u043E\u043F\u043A\u0443 \u0447\u0442\u043E\u0431\u044B \u0438\u0433\u0440\u0430\u0442\u044C"
+  m_Text: Press any button to play
 --- !u!222 &408510613
 CanvasRenderer:
   m_ObjectHideFlags: 0
