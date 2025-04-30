@@ -8,10 +8,10 @@ public class SettingsManager : MonoBehaviour
     private Button musicButton;
     private Button soundButton;
 
-    [SerializeField] private Image musicOn;
-    [SerializeField] private Image musicOff;
-    [SerializeField] private Image soundOn;
-    [SerializeField] private Image soundOff;
+    [SerializeField] private Sprite musicOn;
+    [SerializeField] private Sprite musicOff;
+    [SerializeField] private Sprite soundOn;
+    [SerializeField] private Sprite soundOff;
     void Start()
     {
         musicButton = GameObject.Find("MusicButton").GetComponent<Button>();
@@ -20,15 +20,18 @@ public class SettingsManager : MonoBehaviour
         musicButton.onClick.AddListener(ControlMusic);
         soundButton.onClick.AddListener(ControlSounds);
 
+        musicButton.image.color = new Color(92, 64, 51);
+        soundButton.image.color = new Color(92, 64, 51);
+
         if (PlayerPrefs.GetInt("Music") == 1)
-            musicButton.image = musicOn;
+            musicButton.image.sprite = musicOn;
         else
-            musicButton.image = musicOff;
+            musicButton.image.sprite = musicOff;
 
         if (PlayerPrefs.GetInt("Sound") == 1)
-            soundButton.image = soundOn;
+            soundButton.image.sprite = soundOn;
         else
-            soundButton.image = soundOff;
+            soundButton.image.sprite = soundOff;
     }
     private void Update()
     {
@@ -65,13 +68,13 @@ public class SettingsManager : MonoBehaviour
     private void UpdateButtons()
     {
         if (PlayerPrefs.GetInt("Music") == 1)
-            musicButton.image = musicOn;
+            musicButton.image.sprite = musicOn;
         else
-            musicButton.image = musicOff;
+            musicButton.image.sprite = musicOff;
 
         if (PlayerPrefs.GetInt("Sound") == 1)
-            soundButton.image = soundOn;
+            soundButton.image.sprite = soundOn;
         else
-            soundButton.image = soundOff;
+            soundButton.image.sprite = soundOff;
     }
 }
