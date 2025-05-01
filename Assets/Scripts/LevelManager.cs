@@ -22,7 +22,10 @@ public class LevelManager : MonoBehaviour
 
     void Update()
     {
-        
+        if (Input.GetKeyDown(KeyCode.Escape)) 
+        {
+            SceneManager.LoadScene("MainMenu");
+        }
     }
 
     public void OpenLevel1()

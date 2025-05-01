@@ -10,7 +10,7 @@ public class Saw : MonoBehaviour
     private PlayerMovement player;
 
     private Transform saw;
-    private float rotationSpeed = 180f;
+    private float rotationSpeed = -720;
     void Start()
     {
         saw = GetComponent<Transform>();

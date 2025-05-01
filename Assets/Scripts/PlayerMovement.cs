@@ -1,16 +1,19 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class PlayerMovement : MonoBehaviour
 {
+    [SerializeField] private int levelStarsCount;
+
     [SerializeField] private LayerMask groundLayer;
     [SerializeField] private AudioClip jumpSound;
     [SerializeField] private Transform heart;
 
     private Text starCounter;
-    private Text coinCounter;
+    private Text scoreCounter;
 
     private Transform playerUI;
 
@@ -25,15 +28,21 @@ public class PlayerMovement : MonoBehaviour
     private Animator animator;
     private AudioSource audioSource;
 
+    private Animator winAnimator;
+    private Animator loseAnimator;
+
     private Animator settingsAnimator;
     private bool settingsOpened = false;
     
     private bool isGrounded;
     private bool isDamaged = false;
     private int starCount = 0;
-    private int coinCount = 0;
+    private int score = 0;
 
     private bool dashReady = true;
+
+    private bool isPlaying = true;
+    private bool isPaused = false;
     private void Awake()
     {
         PlayerPrefs.SetInt("Music", 1);
@@ -44,11 +53,14 @@ public class PlayerMovement : MonoBehaviour
         playerUI = GameObject.Find("PlayerUI").GetComponent<Transform>();
 
         //starCounter = GameObject.Find("StarCounter").GetComponent<Text>();
-        //coinCounter = GameObject.Find("CoinCounter").GetComponent<Text>();
+        scoreCounter = GameObject.Find("ScoreCounter").GetComponent<Text>();
 
         rb = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
         audioSource = GetComponent<AudioSource>();
+
+        winAnimator = GameObject.Find("Win").GetComponent<Animator>();
+        loseAnimator = GameObject.Find("Lose").GetComponent<Animator>();
 
         settingsAnimator = GameObject.Find("Settings").GetComponent<Animator>();
 
@@ -58,60 +70,105 @@ public class PlayerMovement : MonoBehaviour
 
     void Update()
     {
-        float move = Input.GetAxisRaw("Horizontal");
-
-        background.position = Vector3.SmoothDamp(
-            new Vector3(background.position.x, background.position.y, background.position.z),
-            new Vector3(rb.position.x * 0.5f + 24, rb.position.y * 0.5f, background.position.z), 
-            ref velocity,
-            0.5f
-            );
-
-        if (move > 0) 
-        { 
-            transform.localScale = new Vector3(Mathf.Abs(transform.localScale.x), transform.localScale.y, transform.localScale.z);
-            rb.velocity = new Vector2(move * speed, rb.velocity.y);
-        }
-
-        if (move < 0) 
-        { 
-            transform.localScale = new Vector3(-Mathf.Abs(transform.localScale.x), transform.localScale.y, transform.localScale.z); 
-            rb.velocity = new Vector2(move * speed, rb.velocity.y);
-        }
-
-        animator.SetBool("isRunning", move != 0);
-        
-        isGrounded = Physics2D.OverlapCircle(transform.position, 0.5f, groundLayer);
-        animator.SetBool("isJumping", !isGrounded);
-
-        if (Input.GetKeyDown(KeyCode.LeftShift) && dashReady)
-        {
-            Dash();
-        }
-
-        if ((Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.Space)) && isGrounded)
-        {
-            Jump(jumpForce);
-        }
-        
-        if (health == 0)
+        if (isPaused)
         {
             Time.timeScale = 0;
         }
-
-        if (Input.GetKeyDown(KeyCode.Escape)) 
+        else
         {
-            settingsAnimator.Play("OpenSettings");
-            settingsOpened = true;
-            Time.timeScale = 0;
-        }
-
-        if (Input.GetKeyDown(KeyCode.Escape) && settingsOpened)
-        {
-            settingsAnimator.Play("CloseSettings");
-            settingsOpened = false;
             Time.timeScale = 1;
         }
+
+        if (starCount == levelStarsCount)
+        {
+            isPlaying = false;
+            StartCoroutine(Win());
+        }
+
+        if (health <= 0)
+        {
+            isPlaying = false;
+            StartCoroutine(Lose());
+        }
+
+        if (PlayerPrefs.GetInt("Sound") == 1)
+        {
+            audioSource.volume = 0.15f;
+        }
+        else
+        {
+            audioSource.volume = 0f;
+        }
+
+        if (isPlaying)
+        {
+            float move = Input.GetAxisRaw("Horizontal");
+
+            background.position = Vector3.SmoothDamp(
+                new Vector3(background.position.x, background.position.y, background.position.z),
+                new Vector3(rb.position.x * 0.5f + 24, rb.position.y * 0.5f, background.position.z),
+                ref velocity,
+                0.5f
+                );
+
+            if (move > 0)
+            {
+                transform.localScale = new Vector3(Mathf.Abs(transform.localScale.x), transform.localScale.y, transform.localScale.z);
+                rb.velocity = new Vector2(move * speed, rb.velocity.y);
+            }
+
+            if (move < 0)
+            {
+                transform.localScale = new Vector3(-Mathf.Abs(transform.localScale.x), transform.localScale.y, transform.localScale.z);
+                rb.velocity = new Vector2(move * speed, rb.velocity.y);
+            }
+
+            animator.SetBool("isRunning", move != 0);
+
+            isGrounded = Physics2D.OverlapCircle(transform.position, 0.5f, groundLayer);
+            animator.SetBool("isJumping", !isGrounded);
+
+            if (Input.GetKeyDown(KeyCode.LeftShift) && dashReady)
+            {
+                Dash();
+            }
+
+            if ((Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.Space)) && isGrounded)
+            {
+                Jump(jumpForce);
+            }
+
+            if (Input.GetKeyDown(KeyCode.Escape))
+            {
+                isPaused = true;
+                settingsAnimator.Play("OpenSettings");
+                settingsOpened = true;
+            }
+
+            if (Input.GetKeyDown(KeyCode.Escape) && settingsOpened)
+            {
+                isPaused = false;
+                settingsAnimator.Play("CloseSettings");
+                settingsOpened = false;
+            }
+        }
+    }
+    public IEnumerator Win()
+    {
+        winAnimator.Play("WinAnimation");
+        yield return new WaitForSeconds(0.5f);
+        Time.timeScale = 0;
+        yield return new WaitForSeconds(1f);
+        SceneManager.LoadScene("LevelMenu");
+    }
+
+    public IEnumerator Lose()
+    {
+        loseAnimator.Play("LoseAnimation");
+        yield return new WaitForSeconds(0.5f);
+        Time.timeScale = 0;
+        yield return new WaitForSeconds(1f);
+        SceneManager.LoadScene("LevelMenu");
     }
 
     public void TakeDamage(int damageValue)
@@ -208,16 +265,14 @@ public class PlayerMovement : MonoBehaviour
 
         for (int i = 0; i < health; i++)
         {
-            Instantiate(heart, new Vector3(-8 + 1 * i, 4, 0), Quaternion.identity, playerUI);
+            Instantiate(heart, new Vector3(playerUI.position.x - 8 + (1.05f * i), playerUI.position.y + 4, 0), Quaternion.identity, playerUI);
         }
 
-        //coinCounter.text = coinCount.ToString();
-        //starCounter.text = starCount.ToString();
+        scoreCounter.text = "score: " + score.ToString();
     }
-
-    public void AddCoins()
+    public void AddScore()
     {
-        coinCount++;
+        score += 5;
         UpdateUI();
     }
 

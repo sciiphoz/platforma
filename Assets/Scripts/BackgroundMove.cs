@@ -15,7 +15,6 @@ public class BackgroundMove : MonoBehaviour
         background = GameObject.Find("BackgroundLayer").GetComponent<Transform>();
         backgroundStartPos = background.transform.position;
     }
-
     void Update()
     {
         if (background.position.x >= backgroundStartPos.x + distance - 0.1f)

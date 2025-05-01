@@ -33,13 +33,11 @@ public class SettingsManager : MonoBehaviour
         else
             soundButton.image.sprite = soundOff;
     }
-    private void Update()
-    {
-        Debug.Log(PlayerPrefs.GetInt("Music") + " " + PlayerPrefs.GetInt("Sound"));
-    }
 
     public void ControlMusic()
     {
+        Debug.Log(3);
+
         if (PlayerPrefs.GetInt("Music") == 0)
         {
             PlayerPrefs.SetInt("Music", 1); 
