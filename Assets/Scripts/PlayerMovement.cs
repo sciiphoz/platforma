@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -23,7 +22,7 @@ public class PlayerMovement : MonoBehaviour
     private int health = 3;
     private float speed = 4f;
     private float jumpForce = 7f;
-    
+
     private Rigidbody2D rb;
     private Animator animator;
     private AudioSource audioSource;
@@ -33,7 +32,7 @@ public class PlayerMovement : MonoBehaviour
 
     private Animator settingsAnimator;
     private bool settingsOpened = false;
-    
+
     private bool isGrounded;
     private bool isDamaged = false;
     private int starCount = 0;
@@ -52,7 +51,7 @@ public class PlayerMovement : MonoBehaviour
     {
         playerUI = GameObject.Find("PlayerUI").GetComponent<Transform>();
 
-        //starCounter = GameObject.Find("StarCounter").GetComponent<Text>();
+        starCounter = GameObject.Find("StarCounter").GetComponent<Text>();
         scoreCounter = GameObject.Find("ScoreCounter").GetComponent<Text>();
 
         rb = GetComponent<Rigidbody2D>();
@@ -138,14 +137,12 @@ public class PlayerMovement : MonoBehaviour
                 Jump(jumpForce);
             }
 
-            if (Input.GetKeyDown(KeyCode.Escape))
+            if (Input.GetKeyDown(KeyCode.Escape) && settingsOpened == false)
             {
-                isPaused = true;
-                settingsAnimator.Play("OpenSettings");
+                StartCoroutine(Pause());
                 settingsOpened = true;
             }
-
-            if (Input.GetKeyDown(KeyCode.Escape) && settingsOpened)
+            else if (Input.GetKeyDown(KeyCode.Escape) && settingsOpened == true)
             {
                 isPaused = false;
                 settingsAnimator.Play("CloseSettings");
@@ -170,17 +167,43 @@ public class PlayerMovement : MonoBehaviour
         yield return new WaitForSeconds(1f);
         SceneManager.LoadScene("LevelMenu");
     }
-
+    public IEnumerator Pause()
+    {
+        settingsAnimator.Play("OpenSettings");
+        yield return new WaitForSeconds(0.5f);
+        isPaused = true;
+    }
     public void TakeDamage(int damageValue)
     {
         if (isDamaged == false)
         {
             health -= damageValue;
+            AddScore(-1);
 
             StartCoroutine(IFramesCounter());
             StartCoroutine(IFramesAnimation());
             UpdateUI();
         }
+    }
+
+    public void PlayCoinSound(AudioClip audio)
+    {
+        audioSource.PlayOneShot(audio);
+    }
+
+    public void PlayStarSound(AudioClip audio)
+    {
+        audioSource.PlayOneShot(audio);
+    }
+
+    public void TakeDamage(int damageValue, bool ignore)
+    {
+        health -= damageValue;
+        AddScore(-1);
+
+        StartCoroutine(IFramesCounter());
+        StartCoroutine(IFramesAnimation());
+        UpdateUI();
     }
 
     public IEnumerator IFramesCounter()
@@ -218,9 +241,9 @@ public class PlayerMovement : MonoBehaviour
 
         if (transform.localScale.x > 0)
         {
-            rb.velocity = new Vector2(10f, rb.velocity.y);
+            rb.velocity = new Vector2(7.5f, rb.velocity.y);
         }
-        else rb.velocity = new Vector2(-10f, rb.velocity.y);
+        else rb.velocity = new Vector2(-7.5f, rb.velocity.y);
 
         StartCoroutine(DashCooldown());
     }
@@ -228,10 +251,10 @@ public class PlayerMovement : MonoBehaviour
     {
         rb.constraints = RigidbodyConstraints2D.FreezePositionY;
         rb.constraints = RigidbodyConstraints2D.FreezeRotation;
-        yield return new WaitForSeconds(0.2f);
+        yield return new WaitForSeconds(0.75f);
         rb.constraints = RigidbodyConstraints2D.None;
         rb.constraints = RigidbodyConstraints2D.FreezeRotation;
-    } 
+    }
     public IEnumerator DashCooldown()
     {
         dashReady = false;
@@ -260,25 +283,29 @@ public class PlayerMovement : MonoBehaviour
     {
         foreach (Transform child in playerUI.transform)
         {
-            Destroy(child.gameObject);
+            if (child.CompareTag("Heart"))
+                Destroy(child.gameObject);
         }
 
         for (int i = 0; i < health; i++)
         {
-            Instantiate(heart, new Vector3(playerUI.position.x - 8 + (1.05f * i), playerUI.position.y + 4, 0), Quaternion.identity, playerUI);
+            Instantiate(heart, new Vector3(playerUI.position.x - 8 + (1.05f * i), playerUI.position.y + 4.5f, 0), Quaternion.identity, playerUI);
         }
 
         scoreCounter.text = "score: " + score.ToString();
+        starCounter.text = starCount.ToString();
     }
-    public void AddScore()
+    public void AddScore(int mult)
     {
-        score += 5;
+        score += 5 * mult;
         UpdateUI();
     }
 
     public void AddStars()
     {
         starCount++;
+        AddScore(2);
+        if (health != 3) health++;
         UpdateUI();
     }
 }

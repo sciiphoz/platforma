@@ -6,6 +6,7 @@ TagManager:
   tags:
   - KillBrick
   - MovingBlock
+  - Heart
   layers:
   - Default
   - TransparentFX

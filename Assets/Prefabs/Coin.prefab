@@ -26,8 +26,8 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_LocalScale: {x: 2.5, y: 2.5, z: 2.5}
+  m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 5396737130401968275}
   m_Father: {fileID: 0}
@@ -43,6 +43,7 @@ GameObject:
   - component: {fileID: 5396737130401968275}
   - component: {fileID: 7219614415962404435}
   - component: {fileID: 6655990224325033068}
+  - component: {fileID: 5689323190940591857}
   m_Layer: 0
   m_Name: Coin
   m_TagString: Untagged
@@ -105,7 +106,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 5
   m_Sprite: {fileID: 21300000, guid: 20fe79a7e2a8be644b115e39fed491da, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -146,9 +147,24 @@ CircleCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0.00053484144, y: 0}
+  m_Offset: {x: 0.000047426223, y: 0}
   serializedVersion: 2
-  m_Radius: 0.04951432
+  m_Radius: 0.07666602
+--- !u!114 &5689323190940591857
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6647731244133866112}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6c54cd38eceefb94e881fd98553dae8d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  coinPickUpSound1: {fileID: 8300000, guid: 9cec7b1e7ae66f040920eddb5c1b7df5, type: 3}
+  coinPickUpSound2: {fileID: 8300000, guid: 59a1c2005fd4d9d4db7f9eb267ca775e, type: 3}
+  coinPickUpSound3: {fileID: 8300000, guid: 470f241f00f0b2442bbf418acba2d381, type: 3}

@@ -18,6 +18,7 @@ public class EnemyWeakpoint : MonoBehaviour
         {
             Destroy(enemy.gameObject);
 
+            player.AddScore(2);
             player.Jump(5);
         }
     }

@@ -1,12 +1,15 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class SettingsManager : MonoBehaviour
 {
     private Button musicButton;
     private Button soundButton;
+    private Button menuButton;
+    private Button restartButton;
 
     [SerializeField] private Sprite musicOn;
     [SerializeField] private Sprite musicOff;
@@ -16,12 +19,13 @@ public class SettingsManager : MonoBehaviour
     {
         musicButton = GameObject.Find("MusicButton").GetComponent<Button>();
         soundButton = GameObject.Find("SoundButton").GetComponent<Button>();
+        menuButton = GameObject.Find("Menu").GetComponent<Button>();
+        restartButton = GameObject.Find("Restart").GetComponent<Button>();
 
         musicButton.onClick.AddListener(ControlMusic);
         soundButton.onClick.AddListener(ControlSounds);
-
-        musicButton.image.color = new Color(92, 64, 51);
-        soundButton.image.color = new Color(92, 64, 51);
+        menuButton.onClick.AddListener(OpenMenu);
+        restartButton.onClick.AddListener(RestartLevel);
 
         if (PlayerPrefs.GetInt("Music") == 1)
             musicButton.image.sprite = musicOn;
@@ -32,12 +36,13 @@ public class SettingsManager : MonoBehaviour
             soundButton.image.sprite = soundOn;
         else
             soundButton.image.sprite = soundOff;
+
+        musicButton.image.color = new Color(92, 64, 51);
+        soundButton.image.color = new Color(92, 64, 51);
     }
 
     public void ControlMusic()
     {
-        Debug.Log(3);
-
         if (PlayerPrefs.GetInt("Music") == 0)
         {
             PlayerPrefs.SetInt("Music", 1); 
@@ -63,6 +68,16 @@ public class SettingsManager : MonoBehaviour
         UpdateButtons();
     }
 
+    public void OpenMenu()
+    {
+        SceneManager.LoadScene("LevelMenu");
+    }
+
+    public void RestartLevel()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    }
+
     private void UpdateButtons()
     {
         if (PlayerPrefs.GetInt("Music") == 1)
@@ -74,5 +89,8 @@ public class SettingsManager : MonoBehaviour
             soundButton.image.sprite = soundOn;
         else
             soundButton.image.sprite = soundOff;
+
+        musicButton.image.color = new Color(92, 64, 51);
+        soundButton.image.color = new Color(92, 64, 51);
     }
 }

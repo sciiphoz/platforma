@@ -22,15 +22,15 @@ public class MovingBlock : MonoBehaviour
 
     void Update()
     {
-        if (block.position.x >= startPos.x + distance)
+        if (block.position.x >= startPos.x + distance - 0.05f)
             movingRight = false;
-        else if (block.position.x <= startPos.x - distance)
+        else if (block.position.x <= startPos.x - distance + 0.05f)
             movingRight = true;
 
         if (movingRight)
-            block.position = Vector3.MoveTowards(block.position, new Vector3(startPos.x + distance, startPos.y, startPos.z), 0.006f);
+            block.position = Vector3.MoveTowards(block.position, new Vector3(startPos.x + distance, startPos.y, startPos.z), 0.012f);
         else
-            block.position = Vector3.MoveTowards(block.position, new Vector3(startPos.x - distance, startPos.y, startPos.z), 0.006f);
+            block.position = Vector3.MoveTowards(block.position, new Vector3(startPos.x - distance, startPos.y, startPos.z), 0.012f);
     }
 
     private void OnCollisionEnter2D(Collision2D collision)

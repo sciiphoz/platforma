@@ -10,7 +10,7 @@ public class CameraMovement : MonoBehaviour
     [SerializeField] private float leftLimitX;
     [SerializeField] private float rightLimitX;
 
-    private float smoothSpeed = 0.005f;
+    private float smoothSpeed = 0.01f;
     private bool isMoving = true;
 
     private void Update()

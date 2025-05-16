@@ -16,7 +16,7 @@ public class Fall : MonoBehaviour
         {
             Debug.Log("a");
 
-            _player.TakeDamage(3);
+            _player.TakeDamage(3, true);
         }
     }
 }
