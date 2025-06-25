@@ -14,40 +14,13 @@ namespace Assets.Scripts
     {
         private static string apiUrl = "https://localhost:7253/api/UsersLogins/";
 
-        public static void GetUserSkins(int userId)
+        public static void AddScore(int userId, int amount, int lvl)
         {
-            GameManager.Instance.StartCoroutine(GetUserSkinsCoroutine(userId));
+            GameManager.Instance.StartCoroutine(AddScoreAsync(userId, amount, lvl));
         }
-        public static IEnumerator GetUserSkinsCoroutine(int userId)
+        public static IEnumerator AddScoreAsync(int userId, int amount, int lvl)
         {
-            using (UnityWebRequest request = new UnityWebRequest(apiUrl + $"getUsersSkins?userId={userId}", "GET"))
-            {
-                yield return request.SendWebRequest();
-
-                if (request.error != null)
-                {
-                    Debug.Log(request.error);
-                }
-                else
-                {
-                    SkinsData skinsdata = JsonUtility.FromJson<SkinsData>(request.downloadHandler.text);
-
-                    foreach (var skindata in skinsdata.userskin)
-                    {
-                        PlayerPrefs.SetInt($"id_{skindata.id_User}_Skin_{skindata.id_Skin}", 1);
-                        Debug.Log(PlayerPrefs.GetInt($"id_{skindata.id_User}_Skin_{skindata.id_Skin}"));
-                    }
-                }
-            }
-        }
-
-        public static void AddCurrency(int userId, int amount)
-        {
-            GameManager.Instance.StartCoroutine(AddCurrencyAsync(userId, amount));
-        }
-        public static IEnumerator AddCurrencyAsync(int userId, int amount)
-        {
-            using (UnityWebRequest request = new UnityWebRequest(apiUrl + $"user/{userId}/addCurrency/{amount}", "PUT"))
+            using (UnityWebRequest request = new UnityWebRequest(apiUrl + $"user/{userId}/score/{amount}/level/{lvl}", "PUT"))
             {
                 request.downloadHandler = new DownloadHandlerBuffer();
                 yield return request.SendWebRequest();
@@ -57,43 +30,6 @@ namespace Assets.Scripts
                     Debug.Log(request.error);
                 }
 
-            }
-        }
-
-        public static void DepleteCurrency(int userId, int amount)
-        {
-            GameManager.Instance.StartCoroutine(DepleteCurrencyAsync(userId, amount));
-        }
-        public static IEnumerator DepleteCurrencyAsync(int userId, int amount)
-        {
-            using (UnityWebRequest request = new UnityWebRequest(apiUrl + $"user/{userId}/depleteCurrency/{amount}", "PUT"))
-            {
-                yield return request.SendWebRequest();
-
-                if (request.error != null)
-                {
-                    Debug.Log(request.error);
-                }
-            }
-        }
-
-        public static void BuySkin(int userId, int skinId)
-        {
-            GameManager.Instance.StartCoroutine(BuySkinAsync(userId, skinId));
-        }
-        public static IEnumerator BuySkinAsync(int userId, int skinId)
-        {
-            using (UnityWebRequest request = new UnityWebRequest(apiUrl + $"user/{userId}/buySkin/{skinId}", "PUT"))
-            {
-                yield return request.SendWebRequest();
-
-                if (request.error != null)
-                {
-                    Debug.Log(request.error);
-                }
-
-                PlayerPrefs.SetInt($"id_{userId}_Skin_{skinId}", 1);
-                PlayerPrefs.Save();
             }
         }
 
@@ -118,7 +54,8 @@ namespace Assets.Scripts
                     Debug.Log(response);
                     LoginResponse userData = JsonUtility.FromJson<LoginResponse>(response);
 
-                    PlayerPrefs.SetInt("Currency", userData.user.currency);
+                    PlayerPrefs.SetInt("Level1Score", userData.user.level1score);
+                    PlayerPrefs.SetInt("Level2Score", userData.user.level2score);
                     PlayerPrefs.Save();
                 }
             }
@@ -156,7 +93,8 @@ namespace Assets.Scripts
                 if (userData != null)
                 {
                     PlayerPrefs.SetInt("PlayerID", userData.user.id_User);
-                    PlayerPrefs.SetInt("Currency", userData.user.currency);
+                    PlayerPrefs.SetInt("Level1Score", userData.user.level1score);
+                    PlayerPrefs.SetInt("Level2Score", userData.user.level2score);
                     PlayerPrefs.Save();
                     SceneManager.LoadScene("MainMenu");
                 }
@@ -172,6 +110,7 @@ namespace Assets.Scripts
         }
         public static void Login(string login, string password)
         {
+            Debug.Log(login + password);
             GameManager.Instance.StartCoroutine(LoginCoroutine(login, password));
         }
         public static IEnumerator LoginCoroutine(string login, string password)
@@ -206,7 +145,8 @@ namespace Assets.Scripts
                     if (userData != null)
                     {
                         PlayerPrefs.SetInt("PlayerID", userData.user.id_User);
-                        PlayerPrefs.SetInt("Currency", userData.user.currency);
+                        PlayerPrefs.SetInt("Level1Score", userData.user.level1score);
+                        PlayerPrefs.SetInt("Level2Score", userData.user.level2score);
                         PlayerPrefs.Save();
                         SceneManager.LoadScene("MainMenu");
                     }
@@ -237,7 +177,9 @@ namespace Assets.Scripts
         public int id_User;
         public string login;
         public string password;
-        public int currency;
+        public int level1score;
+        public int level2score;
+        public int level3score;
     }
 
     [System.Serializable]

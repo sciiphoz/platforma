@@ -1,3 +1,5 @@
+using Assets.Scripts;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -16,6 +18,8 @@ public class LevelManager : MonoBehaviour
     private Button recordsButton;
     void Start()
     {
+        ApiRequests.GetUser(PlayerPrefs.GetInt("PlayerID"));
+
         level1Button = GameObject.Find("Level1Button").GetComponent<Button>();
         level2Button = GameObject.Find("Level2Button").GetComponent<Button>();
         level3Button = GameObject.Find("Level3Button").GetComponent<Button>();

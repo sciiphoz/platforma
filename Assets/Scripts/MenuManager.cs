@@ -43,7 +43,8 @@ public class ButtonManager : MonoBehaviour
         }
         else if (Input.GetKeyDown(KeyCode.Escape))
         {
-
+            PlayerPrefs.DeleteAll();
+            SceneManager.LoadScene("Auth");
         }
     }
 

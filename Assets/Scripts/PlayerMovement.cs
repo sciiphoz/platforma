@@ -1,3 +1,4 @@
+using Assets.Scripts;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -152,6 +153,23 @@ public class PlayerMovement : MonoBehaviour
     }
     public IEnumerator Win()
     {
+
+        switch (SceneManager.GetActiveScene().name)
+        {
+            case ("Level1"):
+                ApiRequests.AddScore(PlayerPrefs.GetInt("PlayerID"), score, 1);
+                break;
+            case ("Level2"):
+                ApiRequests.AddScore(PlayerPrefs.GetInt("PlayerID"), score, 2);
+                break;
+            case ("Level3"):
+                ApiRequests.AddScore(PlayerPrefs.GetInt("PlayerID"), score, 3);
+                break;
+            default:
+                Debug.Log("Error occured");
+                break;
+        }
+
         winAnimator.Play("WinAnimation");
         yield return new WaitForSeconds(0.5f);
         Time.timeScale = 0;
