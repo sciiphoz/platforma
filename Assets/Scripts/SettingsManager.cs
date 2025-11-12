@@ -11,6 +11,9 @@ public class SettingsManager : MonoBehaviour
     private Button menuButton;
     private Button restartButton;
 
+    private Slider musicVolumeSlider;
+    private Slider soundVolumeSlider;
+
     [SerializeField] private Sprite musicOn;
     [SerializeField] private Sprite musicOff;
     [SerializeField] private Sprite soundOn;
@@ -22,17 +25,26 @@ public class SettingsManager : MonoBehaviour
         menuButton = GameObject.Find("Menu").GetComponent<Button>();
         restartButton = GameObject.Find("Restart").GetComponent<Button>();
 
+        musicVolumeSlider = GameObject.Find("MusicSlider").GetComponent<Slider>();
+        soundVolumeSlider = GameObject.Find("SoundSlider").GetComponent<Slider>();
+
+        musicVolumeSlider.value = PlayerPrefs.GetFloat("Music");
+        soundVolumeSlider.value = PlayerPrefs.GetFloat("Sound");
+
+        musicVolumeSlider.onValueChanged.AddListener(ChangeMusicVolume);
+        soundVolumeSlider.onValueChanged.AddListener(ChangeSoundVolume);
+
         musicButton.onClick.AddListener(ControlMusic);
         soundButton.onClick.AddListener(ControlSounds);
         menuButton.onClick.AddListener(OpenMenu);
         restartButton.onClick.AddListener(RestartLevel);
 
-        if (PlayerPrefs.GetInt("Music") == 1)
+        if (PlayerPrefs.GetFloat("Music") != 0f)
             musicButton.image.sprite = musicOn;
         else
             musicButton.image.sprite = musicOff;
 
-        if (PlayerPrefs.GetInt("Sound") == 1)
+        if (PlayerPrefs.GetFloat("Sound") != 0f)
             soundButton.image.sprite = soundOn;
         else
             soundButton.image.sprite = soundOff;
@@ -43,27 +55,43 @@ public class SettingsManager : MonoBehaviour
 
     public void ControlMusic()
     {
-        if (PlayerPrefs.GetInt("Music") == 0)
+        if (PlayerPrefs.GetFloat("Music") == 0f)
         {
-            PlayerPrefs.SetInt("Music", 1); 
+            PlayerPrefs.SetFloat("Music", 1f);
         }
         else
         {
-            PlayerPrefs.SetInt("Music", 0);
+            musicVolumeSlider.value = 0f;
+            PlayerPrefs.SetFloat("Music", 0f);
         }
 
         UpdateButtons();
     }
     public void ControlSounds()
     {
-        if (PlayerPrefs.GetInt("Sound") == 0)
+        if (PlayerPrefs.GetFloat("Sound") == 0f)
         {
-            PlayerPrefs.SetInt("Sound", 1);
+            PlayerPrefs.SetFloat("Sound", 1f);
         }
         else
         {
-            PlayerPrefs.SetInt("Sound", 0);
+            soundVolumeSlider.value = 0f;
+            PlayerPrefs.SetFloat("Sound", 0f);
         }
+
+        UpdateButtons();
+    }
+
+    public void ChangeMusicVolume(float sliderValue)
+    {
+        PlayerPrefs.SetFloat("Music", sliderValue);
+
+        UpdateButtons();
+    }
+
+    public void ChangeSoundVolume(float sliderValue)
+    {
+        PlayerPrefs.SetFloat("Sound", sliderValue);
 
         UpdateButtons();
     }
@@ -80,17 +108,25 @@ public class SettingsManager : MonoBehaviour
 
     private void UpdateButtons()
     {
-        if (PlayerPrefs.GetInt("Music") == 1)
+        if (PlayerPrefs.GetFloat("Music") != 0f)
             musicButton.image.sprite = musicOn;
         else
             musicButton.image.sprite = musicOff;
 
-        if (PlayerPrefs.GetInt("Sound") == 1)
+        if (PlayerPrefs.GetFloat("Sound") != 0f)
             soundButton.image.sprite = soundOn;
         else
             soundButton.image.sprite = soundOff;
 
         musicButton.image.color = new Color(92, 64, 51);
         soundButton.image.color = new Color(92, 64, 51);
+
+        UpdateSliders();
+    }
+
+    private void UpdateSliders()
+    {
+        musicVolumeSlider.value = PlayerPrefs.GetFloat("Music");
+        soundVolumeSlider.value = PlayerPrefs.GetFloat("Sound");
     }
 }

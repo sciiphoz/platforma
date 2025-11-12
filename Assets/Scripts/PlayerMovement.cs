@@ -45,8 +45,8 @@ public class PlayerMovement : MonoBehaviour
     private bool isPaused = false;
     private void Awake()
     {
-        PlayerPrefs.SetInt("Music", 1);
-        PlayerPrefs.SetInt("Sound", 1);
+        PlayerPrefs.SetFloat("Music", 1);
+        PlayerPrefs.SetFloat("Sound", 1);
     }
     void Start()
     {
@@ -91,14 +91,7 @@ public class PlayerMovement : MonoBehaviour
             StartCoroutine(Lose());
         }
 
-        if (PlayerPrefs.GetInt("Sound") == 1)
-        {
-            audioSource.volume = 0.15f;
-        }
-        else
-        {
-            audioSource.volume = 0f;
-        }
+        audioSource.volume = PlayerPrefs.GetFloat("Sound");
 
         if (isPlaying)
         {

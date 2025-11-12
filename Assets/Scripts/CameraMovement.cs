@@ -15,14 +15,7 @@ public class CameraMovement : MonoBehaviour
 
     private void Update()
     {
-        if (PlayerPrefs.GetInt("Music") == 1)
-        {
-            GetComponent<AudioSource>().volume = 0.25f;
-        }
-        else
-        {
-            GetComponent<AudioSource>().volume = 0f;
-        }
+        GetComponent<AudioSource>().volume = PlayerPrefs.GetFloat("Music");
     }
 
     private void LateUpdate()

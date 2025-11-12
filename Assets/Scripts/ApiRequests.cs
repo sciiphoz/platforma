@@ -29,7 +29,6 @@ namespace Assets.Scripts
                 {
                     Debug.Log(request.error);
                 }
-
             }
         }
 
@@ -202,5 +201,18 @@ namespace Assets.Scripts
     {
         public UserSkin[] userskin;
         public bool status;
+    }
+
+    [Serializable]
+    public class UserRecord
+    {
+        public bool status;
+    }
+
+    [Serializable]
+    public class Achievement
+    {
+        public string title;
+        public string desc;
     }
 }
