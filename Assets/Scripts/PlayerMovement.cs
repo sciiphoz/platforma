@@ -147,6 +147,15 @@ public class PlayerMovement : MonoBehaviour
     }
     public IEnumerator Win()
     {
+        if (score > 150)
+        {
+            ApiRequests.AddAchievementAsync(5, PlayerPrefs.GetInt("PlayerID"));
+        }
+
+        if (health == 1)
+        {
+            ApiRequests.AddAchievementAsync(1, PlayerPrefs.GetInt("PlayerID"));
+        }
 
         switch (SceneManager.GetActiveScene().name)
         {
