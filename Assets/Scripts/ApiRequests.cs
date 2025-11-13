@@ -31,6 +31,19 @@ namespace Assets.Scripts
                 }
             }
         }
+        public static IEnumerator AddAchievementAsync(int achievementId, int userId)
+        {
+            using (UnityWebRequest request = new UnityWebRequest($"https://localhost:7253/api/UsersRecords/achievement/{achievementId}/addTo/{userId}", "POST"))
+            {
+                request.downloadHandler = new DownloadHandlerBuffer();
+                yield return request.SendWebRequest();
+
+                if (request.error != null)
+                {
+                    Debug.Log(request.error);
+                }
+            }
+        }
 
         public static void GetUser(int userId)
         {
@@ -201,18 +214,5 @@ namespace Assets.Scripts
     {
         public UserSkin[] userskin;
         public bool status;
-    }
-
-    [Serializable]
-    public class UserRecord
-    {
-        public bool status;
-    }
-
-    [Serializable]
-    public class Achievement
-    {
-        public string title;
-        public string desc;
     }
 }

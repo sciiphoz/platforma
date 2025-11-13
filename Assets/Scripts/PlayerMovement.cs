@@ -88,6 +88,7 @@ public class PlayerMovement : MonoBehaviour
         if (health <= 0)
         {
             isPlaying = false;
+            ApiRequests.AddAchievementAsync(3, PlayerPrefs.GetInt("PlayerID"));
             StartCoroutine(Lose());
         }
 
