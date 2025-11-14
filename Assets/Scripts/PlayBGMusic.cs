@@ -18,12 +18,6 @@ public class PlayBGMusic : MonoBehaviour
 
         switch (SceneManager.GetActiveScene().name) 
         {
-            case "MainMenu":
-                audioSource.loop = true;
-                audioSource.clip = menuBGost;
-                audioSource.volume = 0.25f;
-                audioSource.Play();
-                break;
             case "LevelMenu":
                 audioSource.loop = true;
                 audioSource.clip = menuBGost;

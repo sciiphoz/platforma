@@ -19,6 +19,7 @@ public class EnemyWeakpoint : MonoBehaviour
         {
             Destroy(enemy.gameObject);
 
+            Debug.Log(PlayerPrefs.GetInt("PlayerID"));
             ApiRequests.AddAchievementAsync(4, PlayerPrefs.GetInt("PlayerID"));
 
             player.AddScore(2);

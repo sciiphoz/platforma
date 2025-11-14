@@ -33,7 +33,7 @@ namespace Assets.Scripts
         }
         public static IEnumerator AddAchievementAsync(int achievementId, int userId)
         {
-            using (UnityWebRequest request = new UnityWebRequest($"https://localhost:7253/api/UsersRecords/achievement/{achievementId}/addTo/{userId}", "POST"))
+            using (UnityWebRequest request = new UnityWebRequest($"https://localhost:7253/api/UsersRecord/achievement/{achievementId}/addTo/{userId}", "POST"))
             {
                 request.downloadHandler = new DownloadHandlerBuffer();
                 yield return request.SendWebRequest();
@@ -108,7 +108,7 @@ namespace Assets.Scripts
                     PlayerPrefs.SetInt("Level1Score", userData.user.level1score);
                     PlayerPrefs.SetInt("Level2Score", userData.user.level2score);
                     PlayerPrefs.Save();
-                    SceneManager.LoadScene("MainMenu");
+                    SceneManager.LoadScene("LevelMenu");
                 }
                 else
                 {
@@ -160,7 +160,7 @@ namespace Assets.Scripts
                         PlayerPrefs.SetInt("Level1Score", userData.user.level1score);
                         PlayerPrefs.SetInt("Level2Score", userData.user.level2score);
                         PlayerPrefs.Save();
-                        SceneManager.LoadScene("MainMenu");
+                        SceneManager.LoadScene("LevelMenu");
                     }
                     else
                     {

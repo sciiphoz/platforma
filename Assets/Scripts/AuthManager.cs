@@ -82,7 +82,7 @@ public class AuthManager : MonoBehaviour
                 PlayerPrefs.SetInt("Level1Score", userData.user.level1score);
                 PlayerPrefs.SetInt("Level2Score", userData.user.level2score);
                 PlayerPrefs.Save();
-                SceneManager.LoadScene("MainMenu");
+                SceneManager.LoadScene("LevelMenu");
             }
             else
             {
@@ -134,7 +134,7 @@ public class AuthManager : MonoBehaviour
                     PlayerPrefs.SetInt("Level1Score", userData.user.level1score);
                     PlayerPrefs.SetInt("Level2Score", userData.user.level2score);
                     PlayerPrefs.Save();
-                    SceneManager.LoadScene("MainMenu");
+                    SceneManager.LoadScene("LevelMenu");
                 }
                 else
                 {

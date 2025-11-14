@@ -16,6 +16,7 @@ public class LevelManager : MonoBehaviour
     private Button level3Button;
 
     private Button recordsButton;
+    private Button achievementsButton;
     void Start()
     {
         ApiRequests.GetUser(PlayerPrefs.GetInt("PlayerID"));
@@ -25,12 +26,14 @@ public class LevelManager : MonoBehaviour
         level3Button = GameObject.Find("Level3Button").GetComponent<Button>();
 
         recordsButton = GameObject.Find("RecordsButton").GetComponent<Button>();
+        achievementsButton = GameObject.Find("AchievementsButton").GetComponent<Button>();
 
         level1Button.onClick.AddListener(OpenLevel1);
         level2Button.onClick.AddListener(OpenLevel2);
         level3Button.onClick.AddListener(OpenLevel3);
 
         recordsButton.onClick.AddListener(OpenRecords);
+        achievementsButton.onClick.AddListener(OpenAchievements);
 
         if (PlayerPrefs.GetInt("Level1Score") == 0)
         {
@@ -51,7 +54,7 @@ public class LevelManager : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Escape)) 
         {
-            SceneManager.LoadScene("MainMenu");
+            SceneManager.LoadScene("Auth");
         }
     }
 
@@ -70,5 +73,9 @@ public class LevelManager : MonoBehaviour
     public void OpenRecords()
     {
         SceneManager.LoadScene("RecordsScene");
+    }
+    public void OpenAchievements()
+    {
+        SceneManager.LoadScene("AchievementsScene");
     }
 }

@@ -160,12 +160,15 @@ public class PlayerMovement : MonoBehaviour
         switch (SceneManager.GetActiveScene().name)
         {
             case ("Level1"):
+                PlayerPrefs.SetInt("level1Score", score);
                 ApiRequests.AddScore(PlayerPrefs.GetInt("PlayerID"), score, 1);
                 break;
             case ("Level2"):
+                PlayerPrefs.SetInt("level2Score", score);
                 ApiRequests.AddScore(PlayerPrefs.GetInt("PlayerID"), score, 2);
                 break;
             case ("Level3"):
+                PlayerPrefs.SetInt("level3Score", score);
                 ApiRequests.AddScore(PlayerPrefs.GetInt("PlayerID"), score, 3);
                 break;
             default:

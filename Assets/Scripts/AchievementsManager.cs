@@ -36,6 +36,25 @@ public class AchievementsManager : MonoBehaviour
     void Start()
     {
         GetAllAchievements(PlayerPrefs.GetInt("PlayerID"));
+
+        background1 = GameObject.Find("Background1").GetComponent<SpriteRenderer>();
+        title1 = GameObject.Find("Title1").GetComponent<Text>();
+        desc1 = GameObject.Find("Description1").GetComponent<Text>();
+        background2 = GameObject.Find("Background2").GetComponent<SpriteRenderer>();
+        title2 = GameObject.Find("Title2").GetComponent<Text>();
+        desc2 = GameObject.Find("Description2").GetComponent<Text>();
+        background3 = GameObject.Find("Background3").GetComponent<SpriteRenderer>();
+        title3 = GameObject.Find("Title3").GetComponent<Text>();
+        desc3 = GameObject.Find("Description3").GetComponent<Text>();
+        background4 = GameObject.Find("Background4").GetComponent<SpriteRenderer>();
+        title4 = GameObject.Find("Title4").GetComponent<Text>();
+        desc4 = GameObject.Find("Description4").GetComponent<Text>();
+        background5 = GameObject.Find("Background5").GetComponent<SpriteRenderer>();
+        title5 = GameObject.Find("Title5").GetComponent<Text>();
+        desc5 = GameObject.Find("Description5").GetComponent<Text>();
+        background6 = GameObject.Find("Background6").GetComponent<SpriteRenderer>();
+        title6 = GameObject.Find("Title6").GetComponent<Text>();
+        desc6 = GameObject.Find("Description6").GetComponent<Text>();
     }
 
     void Update()
@@ -53,7 +72,7 @@ public class AchievementsManager : MonoBehaviour
 
     public static IEnumerator GetAllAchievementsCoroutine(int userId)
     {
-        using (UnityWebRequest request = new UnityWebRequest($"https://localhost:7253/api/UsersRecords/getAllRecords/{userId}", "GET"))
+        using (UnityWebRequest request = new UnityWebRequest($"https://localhost:7253/api/UsersRecord/getAllRecords/{userId}", "GET"))
         {
             request.downloadHandler = new DownloadHandlerBuffer();
             yield return request.SendWebRequest();
@@ -67,6 +86,33 @@ public class AchievementsManager : MonoBehaviour
                 string response = request.downloadHandler.text;
                 Debug.Log(response);
                 AchievementsData achievementsData = JsonUtility.FromJson<AchievementsData>(response);
+
+                if (achievementsData.records == null)
+                {
+                    background1.color = Color.black;
+                    title1.color = Color.black;
+                    desc1.text = "???";
+
+                    background2.color = Color.black;
+                    title2.color = Color.black;
+                    desc2.text = "???";
+
+                    background3.color = Color.black;
+                    title3.color = Color.black;
+                    desc3.text = "???";
+
+                    background4.color = Color.black;
+                    title4.color = Color.black;
+                    desc4.text = "???";
+
+                    background5.color = Color.black;
+                    title5.color = Color.black;
+                    desc5.text = "???";
+               
+                    background6.color = Color.black;
+                    title6.color = Color.black;
+                    desc6.text = "???";
+                }
 
                 foreach (var recorddata in achievementsData.records)
                 {
