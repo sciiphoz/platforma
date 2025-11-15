@@ -10,6 +10,7 @@ public class PlayBGMusic : MonoBehaviour
     [SerializeField] private AudioClip level1BGost;
     [SerializeField] private AudioClip level2BGost;
     [SerializeField] private AudioClip level3BGost;
+    
     void Start()
     {
         AudioSource audioSource = GetComponent<AudioSource>();
@@ -21,25 +22,31 @@ public class PlayBGMusic : MonoBehaviour
             case "LevelMenu":
                 audioSource.loop = true;
                 audioSource.clip = menuBGost;
-                audioSource.volume = 0.25f;
+                audioSource.volume = 0.2f;
+                audioSource.Play();
+                break;
+            case "Auth":
+                audioSource.loop = true;
+                audioSource.clip = menuBGost;
+                audioSource.volume = 0.2f;
                 audioSource.Play();
                 break;
             case "Level1":
                 audioSource.loop = true;
                 audioSource.clip = level1BGost;
-                audioSource.volume = 0.25f;
+                audioSource.volume = 0.2f;
                 audioSource.Play();
                 break;
             case "Level2":
                 audioSource.loop = true;
                 audioSource.clip = level2BGost;
-                audioSource.volume = 0.25f;
+                audioSource.volume = 0.2f;
                 audioSource.Play();
                 break;
             case "Level3":
                 audioSource.loop = true;
                 audioSource.clip = level3BGost;
-                audioSource.volume = 0.25f;
+                audioSource.volume = 0.2f;
                 audioSource.Play();
                 break;
             default:

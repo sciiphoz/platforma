@@ -76,17 +76,27 @@ public class AuthManager : MonoBehaviour
         try
         {
             LoginResponse userData = JsonUtility.FromJson<LoginResponse>(registerRequest.downloadHandler.text);
-            if (userData != null)
+
+            if (password.Length > 7)
             {
-                PlayerPrefs.SetInt("PlayerID", userData.user.id_User);
-                PlayerPrefs.SetInt("Level1Score", userData.user.level1score);
-                PlayerPrefs.SetInt("Level2Score", userData.user.level2score);
-                PlayerPrefs.Save();
-                SceneManager.LoadScene("LevelMenu");
+                if (userData != null)
+                {
+                    PlayerPrefs.SetInt("PlayerID", userData.user.id_User);
+                    PlayerPrefs.SetInt("Level1Score", userData.user.level1score);
+                    PlayerPrefs.SetInt("Level2Score", userData.user.level2score);
+                    PlayerPrefs.Save();
+                    SceneManager.LoadScene("LevelMenu");
+                }
+                else
+                {
+                    Debug.LogError("Failed to parse user data after registration");
+                    error.text = "Registration failed.";
+                }
             }
             else
             {
-                Debug.LogError("Failed to parse user data after registration");
+                Debug.LogError("Passwords too short");
+                error.text = "Password should be at least 8 characters.";
             }
         }
         catch (Exception ex)
@@ -101,6 +111,11 @@ public class AuthManager : MonoBehaviour
     }
     public static IEnumerator LoginCoroutine(string login, string password)
     {
+        if (login == string.Empty || password == string.Empty)
+        {
+            error.text = "All fields must be filled.";
+        }
+
         var data = new LoginData { login = login, password = password };
         var jsonData = JsonUtility.ToJson(data);
         byte[] bodyRaw = Encoding.UTF8.GetBytes(jsonData);
