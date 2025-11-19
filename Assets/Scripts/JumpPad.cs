@@ -18,7 +18,7 @@ public class JumpPad : MonoBehaviour
     {
         if (collision.CompareTag("Player"))
         {
-            player.Jump(10f); 
+            player.Jump(15f); 
             StartCoroutine(Timer());
         }
     }

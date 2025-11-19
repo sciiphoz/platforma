@@ -21,8 +21,8 @@ public class PlayerMovement : MonoBehaviour
     private Vector3 velocity;
 
     private int health = 3;
-    private float speed = 4f;
-    private float jumpForce = 7f;
+    private float speed = 4.5f;
+    private float jumpForce = 10.5f;
 
     private Rigidbody2D rb;
     private Animator animator;
@@ -40,6 +40,7 @@ public class PlayerMovement : MonoBehaviour
     private int score = 0;
 
     private bool dashReady = true;
+    private bool isDashing = false;
 
     private bool isPlaying = true;
     private bool isPaused = false;
@@ -96,6 +97,9 @@ public class PlayerMovement : MonoBehaviour
 
         if (isPlaying)
         {
+            if (isDashing)
+                return;
+
             float move = Input.GetAxisRaw("Horizontal");
 
             background.position = Vector3.SmoothDamp(
@@ -117,6 +121,11 @@ public class PlayerMovement : MonoBehaviour
                 rb.velocity = new Vector2(move * speed, rb.velocity.y);
             }
 
+            if (Input.GetKeyUp(KeyCode.A) || Input.GetKeyUp(KeyCode.D))
+            {
+                rb.velocity = new Vector2(rb.velocity.x * 0.5f, rb.velocity.y);
+            }
+
             animator.SetBool("isRunning", move != 0);
 
             isGrounded = Physics2D.OverlapCircle(transform.position, 0.5f, groundLayer);
@@ -130,6 +139,11 @@ public class PlayerMovement : MonoBehaviour
             if ((Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.Space)) && isGrounded)
             {
                 Jump(jumpForce);
+            }
+
+            if ((Input.GetKeyUp(KeyCode.W) || Input.GetKeyUp(KeyCode.Space)) && rb.velocity.y > 0f)
+            {
+                rb.velocity = new Vector2(rb.velocity.x, rb.velocity.y * 0.5f);
             }
 
             if (Input.GetKeyDown(KeyCode.Escape) && settingsOpened == false)
@@ -265,19 +279,24 @@ public class PlayerMovement : MonoBehaviour
 
         if (transform.localScale.x > 0)
         {
-            rb.velocity = new Vector2(7.5f, rb.velocity.y);
+            rb.velocity = new Vector2(8.5f, rb.velocity.y);
         }
-        else rb.velocity = new Vector2(-7.5f, rb.velocity.y);
+        else rb.velocity = new Vector2(-8.5f, rb.velocity.y);
 
         StartCoroutine(DashCooldown());
     }
     public IEnumerator AnchorY()
     {
+        float originalGravity = rb.gravityScale;
+        rb.gravityScale = 0f;
         rb.constraints = RigidbodyConstraints2D.FreezePositionY;
         rb.constraints = RigidbodyConstraints2D.FreezeRotation;
-        yield return new WaitForSeconds(0.75f);
+        isDashing = true;
+        yield return new WaitForSeconds(0.3f);
+        rb.gravityScale = originalGravity;
         rb.constraints = RigidbodyConstraints2D.None;
         rb.constraints = RigidbodyConstraints2D.FreezeRotation;
+        isDashing = false;
     }
     public IEnumerator DashCooldown()
     {

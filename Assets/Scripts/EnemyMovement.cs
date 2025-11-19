@@ -28,12 +28,12 @@ public class EnemyMovement : MonoBehaviour
         if (isRight)
         {
             enemy.position = Vector3.MoveTowards(enemy.position, new Vector3(startPos.x + distance, startPos.y, startPos.z), 0.005f);
-            enemy.localScale = new Vector3(-Mathf.Abs(enemy.localScale.x), enemy.localScale.y, enemy.localScale.z);
+            enemy.localScale = new Vector3(Mathf.Abs(enemy.localScale.x), enemy.localScale.y, enemy.localScale.z);
         }
         else
         {
             enemy.position = Vector3.MoveTowards(enemy.position, new Vector3(startPos.x - distance, startPos.y, startPos.z), 0.005f);
-            enemy.localScale = new Vector3(Mathf.Abs(enemy.localScale.x), enemy.localScale.y, enemy.localScale.z);
+            enemy.localScale = new Vector3(-Mathf.Abs(enemy.localScale.x), enemy.localScale.y, enemy.localScale.z);
         }
     }
 
