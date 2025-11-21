@@ -853,6 +853,18 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 2006780523}
     m_Modifications:
+    - target: {fileID: 2863008721591176289, guid: 05a577fea3d62824e9e2e43445957040, type: 3}
+      propertyPath: m_Color.b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2863008721591176289, guid: 05a577fea3d62824e9e2e43445957040, type: 3}
+      propertyPath: m_Color.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2863008721591176289, guid: 05a577fea3d62824e9e2e43445957040, type: 3}
+      propertyPath: m_Color.r
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4210801246443454715, guid: 05a577fea3d62824e9e2e43445957040, type: 3}
       propertyPath: m_Name
       value: Background
@@ -1127,6 +1139,18 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 2006780523}
     m_Modifications:
+    - target: {fileID: 2863008721591176289, guid: 05a577fea3d62824e9e2e43445957040, type: 3}
+      propertyPath: m_Color.b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2863008721591176289, guid: 05a577fea3d62824e9e2e43445957040, type: 3}
+      propertyPath: m_Color.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2863008721591176289, guid: 05a577fea3d62824e9e2e43445957040, type: 3}
+      propertyPath: m_Color.r
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4210801246443454715, guid: 05a577fea3d62824e9e2e43445957040, type: 3}
       propertyPath: m_Name
       value: Background (1)
@@ -1401,6 +1425,18 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 2006780523}
     m_Modifications:
+    - target: {fileID: 2863008721591176289, guid: 05a577fea3d62824e9e2e43445957040, type: 3}
+      propertyPath: m_Color.b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2863008721591176289, guid: 05a577fea3d62824e9e2e43445957040, type: 3}
+      propertyPath: m_Color.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2863008721591176289, guid: 05a577fea3d62824e9e2e43445957040, type: 3}
+      propertyPath: m_Color.r
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4210801246443454715, guid: 05a577fea3d62824e9e2e43445957040, type: 3}
       propertyPath: m_Name
       value: Background (2)

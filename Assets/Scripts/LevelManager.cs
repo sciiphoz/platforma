@@ -35,14 +35,14 @@ public class LevelManager : MonoBehaviour
         recordsButton.onClick.AddListener(OpenRecords);
         achievementsButton.onClick.AddListener(OpenAchievements);
 
-        if (PlayerPrefs.GetInt("Level1Score") == 0)
+        if (PlayerPrefs.GetInt("level1Score") == 0)
         {
             level2lock.gameObject.SetActive(true);
 
             level2Button.enabled = false;
         }
 
-        if (PlayerPrefs.GetInt("Level2Score") == 0)
+        if (PlayerPrefs.GetInt("level2Score") == 0)
         {
             level3lock.gameObject.SetActive(true);
 

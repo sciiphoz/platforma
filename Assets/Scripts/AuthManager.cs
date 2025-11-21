@@ -14,7 +14,7 @@ public class AuthManager : MonoBehaviour
     private Button registerButton;
 
     private Text loginInput;
-    private Text passwordInput;
+    private InputField passwordInput;
     private static Text error;
     
     void Start()
@@ -23,7 +23,7 @@ public class AuthManager : MonoBehaviour
         registerButton = GameObject.Find("RegButton").GetComponent<Button>();
 
         loginInput = GameObject.Find("LoginText").GetComponent<Text>();    
-        passwordInput = GameObject.Find("PasswordText").GetComponent<Text>();
+        passwordInput = GameObject.Find("PasswordInput").GetComponent<InputField>();
         error = GameObject.Find("ErrorText").GetComponent<Text>();
 
         loginButton.onClick.AddListener(LoginClick);
@@ -37,12 +37,12 @@ public class AuthManager : MonoBehaviour
 
     public void LoginClick()
     {
-        Login(loginInput.text.Trim(), passwordInput.text.Trim());
+        Login(loginInput.text.Trim(), passwordInput.text.ToString().Trim());
     }
 
     public void RegisterClick()
     {
-        Register(loginInput.text.Trim(), passwordInput.text.Trim());
+        Register(loginInput.text.Trim(), passwordInput.text.ToString().Trim());
     }
 
     public static void Register(string login, string password)
@@ -82,8 +82,8 @@ public class AuthManager : MonoBehaviour
                 if (userData != null)
                 {
                     PlayerPrefs.SetInt("PlayerID", userData.user.id_User);
-                    PlayerPrefs.SetInt("Level1Score", userData.user.level1score);
-                    PlayerPrefs.SetInt("Level2Score", userData.user.level2score);
+                    PlayerPrefs.SetInt("level1Score", userData.user.level1score);
+                    PlayerPrefs.SetInt("level2Score", userData.user.level2score);
                     PlayerPrefs.Save();
                     SceneManager.LoadScene("LevelMenu");
                 }
@@ -133,7 +133,7 @@ public class AuthManager : MonoBehaviour
         {
             Debug.LogError("Login failed: " + request.error);
 
-            error.text = "Login failed.";
+            error.text = "Account does not exist.";
         }
 
         else
@@ -146,14 +146,15 @@ public class AuthManager : MonoBehaviour
                 if (userData != null)
                 {
                     PlayerPrefs.SetInt("PlayerID", userData.user.id_User);
-                    PlayerPrefs.SetInt("Level1Score", userData.user.level1score);
-                    PlayerPrefs.SetInt("Level2Score", userData.user.level2score);
+                    PlayerPrefs.SetInt("level1Score", userData.user.level1score);
+                    PlayerPrefs.SetInt("level2Score", userData.user.level2score);
                     PlayerPrefs.Save();
                     SceneManager.LoadScene("LevelMenu");
                 }
                 else
                 {
                     Debug.LogError("Failed to parse user data after login");
+                    error.text = "Login failed.";
                 }
             }
             catch (Exception ex)

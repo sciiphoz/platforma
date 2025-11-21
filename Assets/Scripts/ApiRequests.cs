@@ -66,8 +66,8 @@ namespace Assets.Scripts
                     Debug.Log(response);
                     LoginResponse userData = JsonUtility.FromJson<LoginResponse>(response);
 
-                    PlayerPrefs.SetInt("Level1Score", userData.user.level1score);
-                    PlayerPrefs.SetInt("Level2Score", userData.user.level2score);
+                    PlayerPrefs.SetInt("level1Score", userData.user.level1score);
+                    PlayerPrefs.SetInt("level2Score", userData.user.level2score);
                     PlayerPrefs.Save();
                 }
             }
@@ -105,8 +105,8 @@ namespace Assets.Scripts
                 if (userData != null)
                 {
                     PlayerPrefs.SetInt("PlayerID", userData.user.id_User);
-                    PlayerPrefs.SetInt("Level1Score", userData.user.level1score);
-                    PlayerPrefs.SetInt("Level2Score", userData.user.level2score);
+                    PlayerPrefs.SetInt("level1Score", userData.user.level1score);
+                    PlayerPrefs.SetInt("level2Score", userData.user.level2score);
                     PlayerPrefs.Save();
                     SceneManager.LoadScene("LevelMenu");
                 }
@@ -157,8 +157,8 @@ namespace Assets.Scripts
                     if (userData != null)
                     {
                         PlayerPrefs.SetInt("PlayerID", userData.user.id_User);
-                        PlayerPrefs.SetInt("Level1Score", userData.user.level1score);
-                        PlayerPrefs.SetInt("Level2Score", userData.user.level2score);
+                        PlayerPrefs.SetInt("level1Score", userData.user.level1score);
+                        PlayerPrefs.SetInt("level2Score", userData.user.level2score);
                         PlayerPrefs.Save();
                         SceneManager.LoadScene("LevelMenu");
                     }
